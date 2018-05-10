@@ -3,7 +3,7 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('database.json');
 const db = low(adapter);
-const token = 'NDA2OTQ0NDAwNDE4Mjc1MzMz.DU6UZA.NvoJOwqTyMMNpZfA9oGOlWRN0UM';
+const token = process.env.TOKEN;
 
 db.defaults({ messageDay: [] }).write();
 
