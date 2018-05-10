@@ -35,11 +35,12 @@ try {
 
 
 client.on("message", message => {
-    console.log(message);
+    console.log(message.content);
     var testPrefix = message.content.substring(0,prefix.lenght);
     if(testPrefix != prefix) return;
     if (message.author.bot) return;
     var msgAuthor = message.author.id;
+    console.log(message.author.id);
     //message arguments control
     
     var args = message.content.substring(prefix.length).split(" ");
@@ -48,6 +49,7 @@ client.on("message", message => {
     switch (args[0].toLowerCase()) {
         case "help":
             try {
+                console.log("case help");
                 var commandeBot = "!help => afficher les commandes \n";
                 commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n";
                 commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n";
@@ -56,7 +58,7 @@ client.on("message", message => {
                     .setColor('#D9F200')
                     .addField("Commande du bot", "Voici les commandes du bot \n" + commandeBot)
                     .setFooter("Toujours en développement");
-                message.channel.send(help_embed);
+                message.channel.sendEmbed(help_embed);
             } catch (error) {
                 console.log("Erreur help => " +error);
             }
@@ -174,7 +176,7 @@ client.on("message", message => {
             }
             break;
     }
-
+    console.log("sortie switch");
 });
 
 function GetMessageDay() {
