@@ -1,7 +1,7 @@
 {
   "script": {
     "start": "node index.js" 
-  }
+  },
   "dependencies": {
     "discord.js": {
       "version": "11.3.2",
@@ -17,7 +17,6 @@
         "pify": "3.0.0",
         "steno": "0.4.4"
       }
-    }
     }
   }
 }
