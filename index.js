@@ -35,11 +35,11 @@ try {
 
 
 client.on("message", message => {
+    if (message.author.bot) return;
     console.log(message.content);
     var testPrefix = message.content.substring(0,1);
     console.log("Préfixe envoyé " + testPrefix.toString() + "\n Préfixe attendu " + prefix);
     if(testPrefix != prefix) return;
-    if (message.author.bot) return;
     var msgAuthor = message.author.id;
     console.log(message.author.id);
     //message arguments control
