@@ -1,0 +1,36 @@
+{
+  "messageDay": [
+    {
+      "id": 1,
+      "dayLoop": "1",
+      "currentDay": 1,
+      "channel": "406943538337546251",
+      "message": "message de test",
+      "actif": false
+    },
+    {
+      "id": 2,
+      "dayLoop": "1",
+      "currentDay": 1,
+      "channel": "406943538337546251",
+      "message": "message de test 2",
+      "actif": false
+    },
+    {
+      "id": 3,
+      "dayLoop": "1",
+      "currentDay": 1,
+      "channel": "406943538337546251",
+      "message": "message de test 3",
+      "actif": false
+    },
+    {
+      "id": 4,
+      "dayLoop": "7",
+      "currentDay": 0,
+      "channel": "406943538337546251",
+      "message": "message de test avec leam",
+      "actif": false
+    }
+  ]
+}
