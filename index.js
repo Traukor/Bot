@@ -56,7 +56,7 @@ client.on("message", message => {
                     .setColor('#D9F200')
                     .addField("Commande du bot", "Voici les commandes du bot \n" + commandeBot)
                     .setFooter("Toujours en développement");
-                message.channel.send(help_embed);
+                message.channel.sendEmbed(help_embed);
             } catch (error) {
                 console.log("Erreur help => " +error);
             }
