@@ -35,6 +35,7 @@ try {
 
 
 client.on("message", message => {
+    console.log(message);
     var testPrefix = message.content.substring(0,prefix.lenght);
     if(testPrefix != prefix) return;
     if (message.author.bot) return;
