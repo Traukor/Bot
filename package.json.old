@@ -1,0 +1,7 @@
+{
+  "requires": true,
+  "dependencies": {
+    "discord.js":  "11.3.2",
+    "lowdb":  "1.0.0"
+  }
+}
