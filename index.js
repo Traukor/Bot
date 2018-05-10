@@ -37,6 +37,7 @@ try {
 client.on("message", message => {
     console.log(message.content);
     var testPrefix = message.content.substring(0,prefix.lenght);
+    console.log("Préfixe envoyer" + testPrefix + "\n Préfixe attendu " + prefix);
     if(testPrefix != prefix) return;
     if (message.author.bot) return;
     var msgAuthor = message.author.id;
@@ -67,6 +68,7 @@ client.on("message", message => {
         //Enregistre un message à envoyer régulièrement sur un salon
         case "dayloop":
             try {
+                console.log("case dayloop");
                 var day = 0;
                 var m = "";
                 var number = Number(db.get('messageDay').map('id').last().value()) + 1;
@@ -124,6 +126,7 @@ client.on("message", message => {
         //Récupère les messages enregistré avec leur ID
         case "getmessage":
             try{
+                console.log("case getmessage");
                 var messageObject = Object.values(db.get('messageDay').value());
                 var m_embed = new Discord.RichEmbed()
                     .setColor("#FFFF00");
@@ -146,6 +149,7 @@ client.on("message", message => {
         //Supprime un message récurent de la base
         case "toggledayloop":
             try{
+                console.log("case toggledayloop");
                 var idMessage = Number(args[1]);
                 if (isNaN(idMessage)) {
                     message.channel.send("L'id doit être valide");
