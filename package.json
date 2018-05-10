@@ -1,11 +1,11 @@
 {
-  "requires": true,
+  "name": "empibot",
+  "version": "1.0.0",
   "script": {
     "start": "node index.js" 
   },
   "dependencies": {
-    "discord.js": "11.3.2"
-    ,
+    "discord.js": "11.3.2",
     "lowdb": "1.0.0"
   }
 }
