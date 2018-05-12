@@ -5,7 +5,7 @@ const adapter = new FileSync('database.json');
 const db = low(adapter);
 const token = process.env.TOKEN;
 
-db.defaults({ messageDay: [] }).write();
+db.defaults({ messageDay: [], games: [] }).write();
 
 
 var client = new Discord.Client();
@@ -15,11 +15,15 @@ var mention = "<@406944400418275333>";
 var memberCount = client.users.size;
 var serverCount = client.guilds.size;
 var interval;
+var intervalGame;
 var messageExist = false;
 try {
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
-        client.user.setPresence({ game: { name: 'Frost Punk', type: 0 } });
+        ChangeGamePlayed();
+        intervalGame = setInterval(() => {
+            ChangeGamePlayed();
+        }, 3600000);
         interval = setInterval(() => {
             GetMessageDay();
         },
@@ -215,6 +219,21 @@ function GetMessageDay() {
             }
         }
     } catch (error) {
-        console.log("erreur GetMessageDay => " + erreur);
+        console.log("erreur GetMessageDay => " + error);
+    }
+}
+
+function ChangeGamePlayed()
+{
+    try{
+
+        var messageObject = Object.values(db.get('games').value());
+        var randomNumber = Math.floor(Math.random() * Math.floor(messageObject.lenght));
+        var currentGame = messageObject[randomNumber].value;
+        client.user.setPresence({ game: { name: currentGame, type: 0 } });
+    }
+    catch(error)
+    {
+        console.log("erreur ChangeGamePlayed => " + error)
     }
 }
