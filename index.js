@@ -228,9 +228,9 @@ function ChangeGamePlayed()
     try{
 
         var messageObject = Object.values(db.get('games').value());
-        var randomNumber = Math.floor(Math.random() * Math.floor(messageObject.lenght));
-        var currentGame = messageObject[randomNumber].value()[1];
-        client.user.setPresence({ game: { name: currentGame, type: 0 } });
+        var randomNumber = Math.floor(Math.random() * Math.floor(messageObject.length));
+        var currentGame = messageObject[randomNumber];
+        client.user.setPresence({ game: { name: currentGame["titre"], type: 0 } });
     }
     catch(error)
     {
