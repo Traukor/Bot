@@ -19,7 +19,7 @@ var messageExist = false;
 try {
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
-        client.user.setPresence({ game: { name: 'ici', type: 0 } });
+        client.user.setPresence({ game: { name: 'Frost Punk', type: 0 } });
         interval = setInterval(() => {
             GetMessageDay();
         },
