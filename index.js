@@ -40,12 +40,9 @@ try {
 
 client.on("message", message => {
     if (message.author.bot) return;
-    console.log(message.content);
     var testPrefix = message.content.substring(0,1);
-    console.log("Préfixe envoyé " + testPrefix.toString() + "\n Préfixe attendu " + prefix);
     if(testPrefix != prefix) return;
     var msgAuthor = message.author.id;
-    console.log(message.author.id);
     //message arguments control
     
     var args = message.content.substring(prefix.length).split(" ");
@@ -230,6 +227,7 @@ function ChangeGamePlayed()
         var messageObject = Object.values(db.get('games').value());
         var randomNumber = Math.floor(Math.random() * Math.floor(messageObject.length));
         var currentGame = messageObject[randomNumber];
+        console.log("Jeux en cours => " + currentGame["titre"])
         client.user.setPresence({ game: { name: currentGame["titre"], type: 0 } });
     }
     catch(error)
