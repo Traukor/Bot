@@ -150,7 +150,7 @@ client.on("message", message => {
                         var rows = JSON.parse(JSON.stringify(results));
                         var m_embed = new Discord.RichEmbed()
                             .setColor("#FFFF00");
-                        if (messageObject.length > 0) {
+                        if (rows.length > 0) {
                             m_embed.setTitle(`[ACTIF] : [ID] : [TEXTE]`);
                             for(var element of rows) {
                                 console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel}`);
