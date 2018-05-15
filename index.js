@@ -82,9 +82,7 @@ client.on("message", message => {
                 var m = "";
                 GetNextId();
                 var number = nextId + 1;
-                if (isNaN(number)) {
-                    number = 1;
-                }
+                console.log("nextId + 1 => " + number);
                 try {
                     var day = Number(args[1]);
                 }
@@ -238,6 +236,6 @@ function GetNextId()
 {
     connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
-        nextId = results[0].rowCount + 1;
+        nextId = (results[0].rowCount + 1);
     });
 }
