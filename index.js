@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const low = require('lowdb');
 var mysql = require('mysql');
-var connection = mysql.createConnection({
+var pool = mysql.createPool({
     host     : process.env.host,
     user     : process.env.user,
     password : process.env.pass,
@@ -27,9 +27,12 @@ var intervalGame;
 var nextId;
 
 try {
-    connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
-        if (error) console.log("error select count => " + error);
-        nextId = (Number(results[0].rowCount));
+    pool.getConnection(function(err, connection) {
+        connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
+            if (error) console.log("error select count => " + error);
+            nextId = (Number(results[0].rowCount));
+        });
+        connection.release();
     });
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
@@ -231,17 +234,21 @@ function InsertMessage(id,nbJour,channel,message)
     var insert = process.env.insertMessage;
     insert = insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
     console.log(insert);
-    connection.query(insert, function (error, results, fields) {
-        if (error) console.log("erreur insert => " + error);
+    pool.getConnection(function(err, connection) {
+        connection.query(insert, function (error, results, fields) {
+            if (error) console.log("erreur insert => " + error);
+        });
     });
 }
 
 function GetNextId()
 {
-    connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
-        if (error) console.log("error select count => " + error);
-        nextId = (Number(results[0].rowCount) + 1);
-        console.log((Number(results[0].rowCount) + 1));
-        console.log("after rowcount nextId => " + nextId);
+    pool.getConnection(function(err, connection) {
+        connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
+            if (error) console.log("error select count => " + error);
+            nextId = (Number(results[0].rowCount) + 1);
+            console.log((Number(results[0].rowCount) + 1));
+            console.log("after rowcount nextId => " + nextId);
+        });
     });
 }
