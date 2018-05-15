@@ -24,6 +24,7 @@ var memberCount = client.users.size;
 var serverCount = client.guilds.size;
 var interval;
 var intervalGame;
+var nextId;
 try {
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
@@ -79,7 +80,7 @@ client.on("message", message => {
                 console.log("case dayloop");
                 var day = 0;
                 var m = "";
-                var number = GetNextId() + 1;
+                var number = nextId + 1;
                 if (isNaN(number)) {
                     number = 1;
                 }
@@ -238,8 +239,9 @@ function InsertMessage(id,nbJour,channel,message)
 function GetNextId()
 {
     connection.connect();
-    return connection.query('Select count from message', function (error, results, fields) {
+    connection.query('Select count from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
+        nextId = results;
     });
     connection.end();
 }
