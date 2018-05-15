@@ -1,19 +1,10 @@
 const Discord = require('discord.js');
 const low = require('lowdb');
 var mysql = require('mysql');
-var test;
-var connection = mysql.createConnection({
-    host     : 'eu-cdbr-west-02.cleardb.net',
-    user     : 'b0ba1fc90b423c',
-    password : '37d0c07b',
-    database : 'heroku_bf7b571e4ee1adb'
-  });
-  connection.connect();
-  connection.query('SELECT * from message', function (error, results, fields) {
-    if (error) throw error;
-    console.log("query results =>  " + results[0].message);
-  });
-  connection.end();
+var userheroku,hostheroku,passwordheroku,databaseheroku;
+var dbUrl = decodeURI(process.env.CLEARDB_DATABASE_URL);
+console.log(dburl);
+
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('database.json');
 const db = low(adapter);
