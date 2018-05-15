@@ -236,7 +236,7 @@ function InsertMessage(id,nbJour,channel,message)
 
 function GetNextId()
 {
-    connection.query('Select count from message', function (error, results, fields) {
+    connection.query('Select count(*) from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
         nextId = results;
     });
