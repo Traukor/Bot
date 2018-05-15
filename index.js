@@ -33,7 +33,7 @@ try {
             if(results.length > 0)
                 nextId = (Number(results[results.length].rowCount));
             else
-                nextId = 1;
+                nextId = 0;
             console.log("Dernier ID message => " + nextId);
         });
         connection.release();
