@@ -37,7 +37,7 @@ try {
         });
         connection.release();
     });
-    GetMessageDay(true);
+    GetMessageDay(false);
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
         ChangeGamePlayed();
@@ -209,25 +209,23 @@ function GetMessageDay(incrementCurrentDay) {
                 var rows = JSON.parse(JSON.stringify(results));
                 for(var element of rows) {
                     console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
-                    if(incrementCurrentDay)
+                    
+                    if(element.nbJour == element.currentDay)
                     {
-                        if(element.nbJour == element.currentDay)
-                        {
-                            var mess = new Discord.RichEmbed().addField(element.message);
-                            client.channels.get(element.channel).send(mess);
-                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
-                            connection.query(query, function(err,res,field) {
-                                if(err) console.log(err);
-                            });
-                        }
-                        else
-                        {
-                            // ajouter 1 à la valeur currentDay
-                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
-                            connection.query(query, function(err,res,field) {
-                                if(err) console.log(err);
-                            });
-                        }
+                        var mess = new Discord.RichEmbed().addField(element.message);
+                        client.channels.get(element.channel).send(mess);
+                        var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
+                        connection.query(query, function(err,res,field) {
+                            if(err) console.log(err);
+                        });
+                    }
+                    else if(incrementCurrentDay)
+                    {
+                        // ajouter 1 à la valeur currentDay
+                        var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
+                        connection.query(query, function(err,res,field) {
+                            if(err) console.log(err);
+                        });
                     }
                 }
             });
