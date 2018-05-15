@@ -28,7 +28,7 @@ var nextId;
 
 try {
     pool.getConnection(function(err, connection) {
-        connection.query('Select id as rowCount from message', function (error, results, fields) {
+        connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
             if (error) console.log("error select count => " + error);
             var rows = JSON.parse(JSON.stringify(results[0]));
                 console.log(rows);
