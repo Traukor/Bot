@@ -185,19 +185,16 @@ client.on("message", message => {
                             if(rows.length > 0)
                             {
                                 console.log(rows);
-                                for(var element in rows)
-                                {
-                                    console.log(element.toggle);
-                                        var query = process.env.selectAllMessage.replace("[TOGGLE]", element.toggle == 0 ? 1 : 0).replace("[ID]",idMessage);
+                                    console.log(rows[0].toggle);
+                                        var query = process.env.selectAllMessage.replace("[TOGGLE]", rows[0].toggle == 0 ? 1 : 0).replace("[ID]",idMessage);
                                         connection.query(query, function (error, results, fields) {
                                             if (error) console.log(error);
                                             else 
                                             {
-                                                console.log(element);
-                                                message.channel.send(`Le message "${element.message}" est desormais ${element.toggle == 1 ? "actif" : "inactif"}`);
+                                                console.log(rows[0]);
+                                                message.channel.send(`Le message "${rows[0].message}" est desormais ${rows[0].toggle == 1 ? "actif" : "inactif"}`);
                                             }
                                         });
-                                }
                             }
                             else
                                 message.channel.send("l'id doit exister");
