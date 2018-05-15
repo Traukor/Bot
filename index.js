@@ -185,11 +185,11 @@ client.on("message", message => {
                             console.log(rows);
                             if(rows.length > 0)
                             {
-                                var query = process.env.selectAllMessage.replace("[TOGGLE]", rows.toggle == 1 ? 0 : 1).replace("[ID]",idMessage);
+                                var query = process.env.selectAllMessage.replace("[TOGGLE]", rows.toggle == 0 ? 1 : 0).replace("[ID]",idMessage);
                                 connection.query(query, function (error, results, fields) {
                                     if (error) console.log(error);
                                     else 
-                                        message.channel.send(`Le message "${messageObject[4]}" est desormais ${actif ? "actif" : "inactif"}`);
+                                        message.channel.send(`Le message "${rows.message}" est desormais ${rows.toggle == 0 ? "actif" : "inactif"}`);
                                 });
                             }
                             else
