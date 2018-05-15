@@ -209,6 +209,7 @@ function GetMessageDay(incrementCurrentDay) {
                 var rows = JSON.parse(JSON.stringify(results[0]));
                 console.log(rows);
                 for(element in rows) {
+                    console.log(element);
                     console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
                     if(incrementCurrentDay)
                     {
