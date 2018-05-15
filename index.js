@@ -32,7 +32,7 @@ try {
             if (error) console.log("error select count => " + error);
             var rows = JSON.parse(JSON.stringify(results));
             console.log(rows);
-            nextId = rows.rowCount;
+            nextId = rows.id[rows.length - 1].id;
             console.log("Dernier ID message => " + nextId);
         });
         connection.release();
@@ -207,7 +207,7 @@ function GetMessageDay(incrementCurrentDay) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results[0]));
                 console.log(rows);
-                rows.forEach(element => {
+                for(element in rows) {
                     console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
                     if(incrementCurrentDay)
                     {
@@ -229,7 +229,7 @@ function GetMessageDay(incrementCurrentDay) {
                             });
                         }
                     }
-                });
+                }
             });
             connection.release();
         });
