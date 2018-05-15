@@ -32,7 +32,7 @@ try {
             if (error) console.log("error select count => " + error);
             var rows = JSON.parse(JSON.stringify(results));
             console.log(rows);
-            nextId = rows.id[rows.length - 1].id;
+            nextId = rows[rows.length - 1].id;
             console.log("Dernier ID message => " + nextId);
         });
         connection.release();
