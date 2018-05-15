@@ -187,6 +187,7 @@ client.on("message", message => {
                                 console.log(rows);
                                     console.log(rows[0].toggle);
                                         var query = process.env.selectAllMessage.replace("[TOGGLE]", rows[0].toggle == 0 ? 1 : 0).replace("[ID]",idMessage);
+                                        console.log(query);
                                         connection.query(query, function (error, results, fields) {
                                             if (error) console.log(error);
                                             else 
