@@ -28,7 +28,7 @@ var nextId;
 
 try {
     pool.getConnection(function(err, connection) {
-        connection.query('Select message.id as rowCount from message', function (error, results, fields) {
+        connection.query('Select id as rowCount from message', function (error, results, fields) {
             if (error) console.log("error select count => " + error);
             nextId = (Number(results[results.length].rowCount));
             console.log("Dernier ID message => " + nextId);
