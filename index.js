@@ -229,7 +229,6 @@ function InsertMessage(id,nbJour,channel,message)
 {
     var insert = process.env.insertMessage;
     insert = insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
-    console.log("insert => " + insert);
     connection.query(insert, function (error, results, fields) {
         if (error) console.log("erreur insert => " + error);
     });
@@ -239,7 +238,6 @@ function GetNextId()
 {
     connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
-        console.log(results[0].rowCount);
-        nextId = results[0].rowCount;
+        nextId = results[0].rowCount + 1;
     });
 }
