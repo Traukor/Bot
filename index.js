@@ -182,14 +182,18 @@ client.on("message", message => {
                         connection.query("Select * from message where message.id = " + idMessage, function(err,res,field){
                             if (err) console.log(err);
                             var rows = JSON.parse(JSON.stringify(res));
-                            console.log(rows);
+                            console.log(rows.toggle);
                             if(rows.length > 0)
                             {
+
                                 var query = process.env.selectAllMessage.replace("[TOGGLE]", rows.toggle == 0 ? 1 : 0).replace("[ID]",idMessage);
                                 connection.query(query, function (error, results, fields) {
                                     if (error) console.log(error);
                                     else 
-                                        message.channel.send(`Le message "${rows.message}" est desormais ${rows.toggle == 0 ? "actif" : "inactif"}`);
+                                    {
+                                        console.log(rows);
+                                        message.channel.send(`Le message "${rows.message}" est desormais ${rows.toggle == 1 ? "actif" : "inactif"}`);
+                                    }
                                 });
                             }
                             else
