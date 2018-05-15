@@ -183,7 +183,8 @@ client.on("message", message => {
                             if (err) console.log(err);
                             var rows = JSON.parse(JSON.stringify(res));
                             if(rows.length > 0)
-                                {
+                            {
+                                console.log(rows);
                                 for(var element in rows)
                                 {
                                     console.log(element.toggle);
