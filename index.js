@@ -40,6 +40,7 @@ try {
     
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
+        GetMessageDay(false);
         ChangeGamePlayed();
         intervalGame = setInterval(() => {
             ChangeGamePlayed();
@@ -53,7 +54,7 @@ try {
     });
     
     client.login(token);
-    GetMessageDay(false);
+    
 } catch (error) {
     console.log("Erreur help => " +error);
 }
