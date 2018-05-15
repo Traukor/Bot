@@ -37,7 +37,7 @@ try {
         });
         connection.release();
     });
-    GetMessageDay(false);
+    
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
         ChangeGamePlayed();
@@ -53,6 +53,7 @@ try {
     });
     
     client.login(token);
+    GetMessageDay(false);
 } catch (error) {
     console.log("Erreur help => " +error);
 }
