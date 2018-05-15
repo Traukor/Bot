@@ -228,7 +228,7 @@ function ChangeGamePlayed()
 function InsertMessage(id,nbJour,channel,message)
 {
     var insert = process.env.insertMessage;
-    insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
+    insert = insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
     console.log("insert => " + insert);
     connection.query(insert, function (error, results, fields) {
         if (error) console.log("erreur insert => " + error);
