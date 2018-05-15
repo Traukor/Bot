@@ -9,9 +9,9 @@ var connection = mysql.createConnection({
     database : 'heroku_bf7b571e4ee1adb'
   });
   connection.connect();
-  connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+  connection.query('SELECT * from message AS solution', function (error, results, fields) {
     if (error) throw error;
-    test = results[0].solution;
+    console.log(results[0].solution);
   });
   connection.end();
 const FileSync = require('lowdb/adapters/FileSync');
