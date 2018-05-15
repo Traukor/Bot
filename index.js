@@ -239,7 +239,7 @@ function GetNextId()
 {
     connection.connect();
     return connection.query('Select count from message', function (error, results, fields) {
-        if (error) console.log(error);
+        if (error) console.log("error select count => " + error);
     });
     connection.end();
 }
