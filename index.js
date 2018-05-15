@@ -207,6 +207,7 @@ function GetMessageDay(incrementCurrentDay) {
             connection.query(process.env.selectAllMessage, function (error, results, fields) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results[0]));
+                console.log(rows);
                 rows.forEach(element => {
                     console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
                     if(incrementCurrentDay)
