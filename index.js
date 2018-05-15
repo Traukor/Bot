@@ -79,7 +79,7 @@ client.on("message", message => {
                 console.log("case dayloop");
                 var day = 0;
                 var m = "";
-                var number = Number(db.get('messageDay').map('id').last().value()) + 1;
+                var number = GetNextId() + 1;
                 if (isNaN(number)) {
                     number = 1;
                 }
@@ -233,4 +233,11 @@ function InsertMessage(id,nbJour,channel,message)
       if (error) console.log(error);
     });
     connection.end();
+}
+
+function GetNextId()
+{
+    return connection.query('Select count from message', function (error, results, fields) {
+        if (error) console.log(error);
+      });
 }
