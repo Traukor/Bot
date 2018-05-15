@@ -20,8 +20,6 @@ var client = new Discord.Client();
 var randNum = 0;
 var prefix = "!";
 var mention = "<@406944400418275333>";
-var memberCount = client.users.size;
-var serverCount = client.guilds.size;
 var interval;
 var intervalGame;
 var nextId;
@@ -50,7 +48,7 @@ try {
         },
             86400000);
         console.log("-----------------------------------------------");
-        console.log("[!] Connexion en cours ...\n[!] Veuillez patienter! \n	[!] Les évènements sont après ! :)\n	[!] Les préfix sont : " + prefix + "\n	[!] Mentions : " + mention + " \n [!] Nombre de membre: " + memberCount + "\n [!] Nombre de serveurs: " + serverCount + "\n ");
+        console.log("[!] Connexion en cours ...\n[!] Veuillez patienter! \n	[!] Les évènements sont après ! :)\n	[!] Les préfix sont : " + prefix + "\n	[!] Mentions : " + mention + " \n [!] Nombre de membre: " + client.users.size + "\n [!] Nombre de serveurs: " + client.guilds.size + "\n ");
     });
     
     client.login(token);
@@ -146,19 +144,25 @@ client.on("message", message => {
         case "getmessage":
             try{
                 console.log("case getmessage");
-                var messageObject = Object.values(db.get('messageDay').value());
-                var m_embed = new Discord.RichEmbed()
-                    .setColor("#FFFF00");
-                if (messageObject.length > 0) {
-                    m_embed.setTitle(`[ACTIF] : [ID] : [TEXTE]`);
-                    for (var i = 0; i < messageObject.length; i++) {
-                        m_embed.addField("================", `${messageObject[i].actif ? "actif" : "inactif"} : ${messageObject[i].id} : ${messageObject[i].message}`);
-                    }
-                }
-                else {
-                    m_embed.addField("Aucun message enregistré", "La commande !Dayloop <day> <channel> <message> permet de le faire");
-                }
-                message.channel.send(m_embed);
+                pool.getConnection(function(err, connection) {
+                    connection.query(process.env.selectAllMessage, function (error, results, fields) {
+                        if (error) console.log(error);
+                        var rows = JSON.parse(JSON.stringify(results));
+                        var m_embed = new Discord.RichEmbed()
+                            .setColor("#FFFF00");
+                        if (messageObject.length > 0) {
+                            m_embed.setTitle(`[ACTIF] : [ID] : [TEXTE]`);
+                            for(var element of rows) {
+                                console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel}`);
+                                m_embed.addField("================", `${element.toggle == 1 ? "actif" : "inactif"} : ${element.id} : ${element.message}`);
+                            }
+                        }
+                        else {
+                            m_embed.addField("Aucun message enregistré", "La commande !Dayloop <day> <channel> <message> permet de le faire");
+                        }
+                        message.channel.send(m_embed);
+                    });
+                });
                 
             } catch (error) {
                 console.log("Erreur getmessage => " + error);
@@ -174,19 +178,24 @@ client.on("message", message => {
                     message.channel.send("L'id doit être valide");
                 }
                 else {
-                    var messageObject = Object.values(db.get('messageDay').find({ id: Number(args[1]) }).value());
-                    var actif = !messageObject[5];
-                    if (messageObject.length < 1) {
-                        message.channel.send("l'id doit exister");
-                    }
-                    else {
-                        db.get('messageDay').find({ id: Number(args[1]) }).assign({
-                            actif: actif
-                        }).write();
-                        message.channel.send(`Le message "${messageObject[4]}" est desormais ${actif ? "actif" : "inactif"}`);
-                    }
+                    pool.getConnection(function(err, connection) {
+                        connection.query("Select * from message where message.id = " + idMessage, function(err,res,field){
+                            if (err) console.log(err);
+                            var rows = JSON.parse(JSON.stringify(res));
+                            if(rows.lenght > 0)
+                            {
+                                var query = process.env.selectAllMessage.replace("[TOGGLE]", rows.toggle == 1 ? 0 : 1).replace("[ID]",idMessage);
+                                connection.query(query, function (error, results, fields) {
+                                    if (error) console.log(error);
+                                    else 
+                                        message.channel.send(`Le message "${messageObject[4]}" est desormais ${actif ? "actif" : "inactif"}`);
+                                });
+                            }
+                            else
+                                message.channel.send("l'id doit exister");
+                        });
+                    });
                 }
-                
             } catch (error) {
                 console.log("Erreur dayloop => " + error);
             }
@@ -210,14 +219,13 @@ function GetMessageDay(incrementCurrentDay) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results));
                 for(var element of rows) {
-                    console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
+                    console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel}`);
                     
                     if(element.nbJour == element.currentDay)
                     {
-                        var mess = new Discord.RichEmbed().addField(element.message);
+                        var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
                         var channel = client.channels.get(element.channel);
-                        console.log(channel);
-                        channel.sendMessage(mess);
+                        channel.send(mess);
                         var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
                         connection.query(query, function(err,res,field) {
                             if(err) console.log(err);
