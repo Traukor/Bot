@@ -149,9 +149,9 @@ client.on("message", message => {
                         if (error) console.log(error);
                         var rows = JSON.parse(JSON.stringify(results));
                         var m_embed = new Discord.RichEmbed()
-                            .setColor("#FFFF00");
+                            .setColor("#FFFF00")
+                            .setTitle(`[ACTIF] : [ID] : [TEXTE]`);
                         if (rows.length > 0) {
-                            m_embed.setTitle(`[ACTIF] : [ID] : [TEXTE]`);
                             for(var element of rows) {
                                 console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel}`);
                                 m_embed.addField("================", `${element.toggle == 1 ? "actif" : "inactif"} : ${element.id} : ${element.message}`);
