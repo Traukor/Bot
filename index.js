@@ -80,6 +80,7 @@ client.on("message", message => {
                 console.log("case dayloop");
                 var day = 0;
                 var m = "";
+                GetNextId();
                 var number = nextId + 1;
                 if (isNaN(number)) {
                     number = 1;
