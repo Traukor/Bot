@@ -106,7 +106,7 @@ client.on("message", message => {
                 }
                 else {
                     
-                        InsertMessage(number,args[1],channelId.id,m);
+                        InsertMessage(number,day,channelId.id,m);
                     var message_embed = new Discord.RichEmbed()
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
@@ -228,7 +228,7 @@ function ChangeGamePlayed()
 function InsertMessage(id,nbJour,channel,message)
 {
     var insert = process.env.insertMessage;
-    insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
+    insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
     connection.query(insert, function (error, results, fields) {
         if (error) console.log("erreur insert => " + error);
     });
