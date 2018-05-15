@@ -38,6 +38,7 @@ try {
         });
         connection.release();
     });
+    GetMessageDay(false);
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
         ChangeGamePlayed();
@@ -45,7 +46,7 @@ try {
             ChangeGamePlayed();
         }, 3600000);
         interval = setInterval(() => {
-            GetMessageDay();
+            GetMessageDay(true);
         },
             86400000);
         console.log("-----------------------------------------------");
@@ -79,8 +80,8 @@ client.on("message", message => {
                 var help_embed = new Discord.RichEmbed()
                     .setColor('#D9F200')
                     .addField("Commande du bot", "Voici les commandes du bot \n" + commandeBot)
-                    .setFooter("Toujours en développement");
-                message.channel.sendEmbed(help_embed);
+                    .setFooter("Toujours en développement, toutes les méthodes ne sont pas encore active");
+                message.channel.send(help_embed);
             } catch (error) {
                 console.log("Erreur help => " +error);
             }
@@ -200,18 +201,37 @@ client.on("message", message => {
     console.log("sortie switch");
 });
 
-function GetMessageDay() {
+function GetMessageDay(incrementCurrentDay) {
     try {
-        connection.connect();
-        var query = process.env.selectAllMessage;
-        connection.query(query, function (error, results, fields) {
-            if (error) console.log(error);
-            results.array.forEach(element => {
-                console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
-                // ajouter 1 à la valeur currentDay
+        pool.getConnection(function(err, connection) {
+            connection.query(process.env.selectAllMessage, function (error, results, fields) {
+                if (error) console.log(error);
+                results.array.forEach(element => {
+                    console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
+                    if(incrementCurrentDay)
+                    {
+                        if(element.nbJour == element.currentDay)
+                        {
+                            var mess = new Discord.RichEmbed().addField(element.message);
+                            client.channels.get(element.channel).send(mess);
+                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
+                            connection.query(query, function(err,res,field) {
+                                if(err) console.log(err);
+                            });
+                        }
+                        else
+                        {
+                            // ajouter 1 à la valeur currentDay
+                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
+                            connection.query(query, function(err,res,field) {
+                                if(err) console.log(err);
+                            });
+                        }
+                    }
+                });
             });
+            connection.release();
         });
-        
     } catch (error) {
         console.log("erreur GetMessageDay => " + error);
     }
