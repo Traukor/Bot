@@ -213,7 +213,7 @@ function GetMessageDay(incrementCurrentDay) {
                     if(element.nbJour == element.currentDay)
                     {
                         var mess = new Discord.RichEmbed().addField(element.message);
-                        client.channels.get(element.channel).send(mess);
+                        client.channels.get(element.channel).sendMessage(mess);
                         var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
                         connection.query(query, function(err,res,field) {
                             if(err) console.log(err);
