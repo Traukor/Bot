@@ -1,10 +1,18 @@
 const Discord = require('discord.js');
 const low = require('lowdb');
 var mysql = require('mysql');
-var userheroku,hostheroku,passwordheroku,databaseheroku;
-var dbUrl = decodeURI(process.env.CLEARDB_DATABASE_URL);
-console.log(dburl);
-
+var connection = mysql.createConnection({
+    host     : process.env.host,
+    user     : process.env.user,
+    password : process.env.pass,
+    database : process.env.database
+  });
+  connection.connect();
+  connection.query('SELECT * from message', function (error, results, fields) {
+    if (error) throw error;
+    console.log("query results =>  " + results[0].message);
+  });
+  connection.end();
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('database.json');
 const db = low(adapter);
