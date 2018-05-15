@@ -193,7 +193,7 @@ client.on("message", message => {
                                             else 
                                             {
                                                 console.log(rows[0]);
-                                                message.channel.send(`Le message "${rows[0].message}" est desormais ${rows[0].toggle == 1 ? "actif" : "inactif"}`);
+                                                message.channel.send(`Le message "${rows[0].message}" est desormais ${rows[0].toggle == 0 ? "actif" : "inactif"}`);
                                             }
                                         });
                             }
