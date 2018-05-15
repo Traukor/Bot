@@ -182,7 +182,7 @@ client.on("message", message => {
                         connection.query("Select * from message where message.id = " + idMessage, function(err,res,field){
                             if (err) console.log(err);
                             var rows = JSON.parse(JSON.stringify(res));
-                            if(rows.lenght > 0)
+                            if(rows.id == idMessage)
                             {
                                 var query = process.env.selectAllMessage.replace("[TOGGLE]", rows.toggle == 1 ? 0 : 1).replace("[ID]",idMessage);
                                 connection.query(query, function (error, results, fields) {
