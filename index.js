@@ -30,7 +30,10 @@ try {
     pool.getConnection(function(err, connection) {
         connection.query('Select id as rowCount from message', function (error, results, fields) {
             if (error) console.log("error select count => " + error);
-            nextId = (Number(results[results.length].rowCount));
+            if(results.length > 0)
+                nextId = (Number(results[results.length].rowCount));
+            else
+                nextId = 1;
             console.log("Dernier ID message => " + nextId);
         });
         connection.release();
