@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
   connection.connect();
   connection.query('SELECT * from message', function (error, results, fields) {
     if (error) throw error;
-    console.log("query results =>  " + results);
+    console.log("query results =>  " + results[0]);
   });
   connection.end();
 const FileSync = require('lowdb/adapters/FileSync');
