@@ -84,7 +84,6 @@ client.on("message", message => {
                     if (error) console.log("error select count => " + error);
                     nextId = (Number(results[0].rowCount) + 1);
                 });
-                console.log("nextId + 1 => " + number);
                 try {
                     var day = Number(args[1]);
                 }
