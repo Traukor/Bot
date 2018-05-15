@@ -206,7 +206,7 @@ function GetMessageDay(incrementCurrentDay) {
         pool.getConnection(function(err, connection) {
             connection.query(process.env.selectAllMessage, function (error, results, fields) {
                 if (error) console.log(error);
-                var rows = JSON.parse(JSON.stringify(results[0]));
+                var rows = JSON.parse(JSON.stringify(results));
                 console.log("l210 => " + rows);
                 for(element in rows) {
                     console.log("element in rows l212 => " + element);
