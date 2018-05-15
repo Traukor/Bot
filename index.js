@@ -80,8 +80,10 @@ client.on("message", message => {
                 console.log("case dayloop");
                 var day = 0;
                 var m = "";
-                GetNextId();
-                var number = nextId + 1;
+                connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
+                    if (error) console.log("error select count => " + error);
+                    nextId = (Number(results[0].rowCount) + 1);
+                });
                 console.log("nextId + 1 => " + number);
                 try {
                     var day = Number(args[1]);
@@ -104,7 +106,7 @@ client.on("message", message => {
                 }
                 else {
                     
-                        InsertMessage(number,day,channelId.id,m);
+                        InsertMessage(nextId,day,channelId.id,m);
                     var message_embed = new Discord.RichEmbed()
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
