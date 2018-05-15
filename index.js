@@ -6,13 +6,8 @@ var connection = mysql.createConnection({
     user     : process.env.user,
     password : process.env.pass,
     database : process.env.database
-  });
-  connection.connect();
-  connection.query('SELECT * from message', function (error, results, fields) {
-    if (error) throw error;
-    console.log("query results =>  " + results[0].message);
-  });
-  connection.end();
+});
+
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('database.json');
 const db = low(adapter);
@@ -29,7 +24,6 @@ var memberCount = client.users.size;
 var serverCount = client.guilds.size;
 var interval;
 var intervalGame;
-var messageExist = false;
 try {
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
@@ -109,9 +103,8 @@ client.on("message", message => {
                     console.log(`exception dayloop => channel ${args[2]} introuvable`);
                 }
                 else {
-                    db.get("messageDay")
-                        .push({ id: number, dayLoop: args[1], currentDay: 0, channel: channelId.id, message: m, actif: true })
-                        .write();
+                    
+                        InsertMessage(number,args[1],channelId.id,m);
                     var message_embed = new Discord.RichEmbed()
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
@@ -199,35 +192,16 @@ client.on("message", message => {
 
 function GetMessageDay() {
     try {
-        if (!db.get('messageDay').value) {
-            messageExist = true;
-        }
-        else {
-            var n = (Number(db.get('messageDay').map('id').last().value()) + 1);
-            for (var i = 1; i < n; i++) {
-                var messageObject = Object.values(db.get('messageDay').find({ id: i }).value());
-                if (messageObject[1] == messageObject[2] && messageObject[5]) {
-                    var messageToSend = messageObject[4];
-                    var channel = client.channels.get(messageObject[3]);
-                    var m_Embed = new Discord.RichEmbed()
-                        .setColor("#FFFF00")
-                        .addField("Annonce", `${messageToSend}`);
-                    channel.send(m_Embed);
-                    db.get('messageDay').find({ id: i }).assign(
-                        {
-                            //necessaire de mettre le jour à 1 car sinon il faudrait attendre un jour de plus que prévu
-                            currentDay: 1
-                        }).write();
-                }
-                else if(messageObject[5] && messageObject[1] > messageObject[2]){
-                    var v = Number(messageObject[2]) + 1;
-                    db.get('messageDay').find({ id: i }).assign(
-                        {
-                            currentDay: v
-                        }).write();
-                }
-            }
-        }
+        connection.connect();
+        var query = process.env.selectAllMessage;
+        connection.query(query, function (error, results, fields) {
+            if (error) console.log(error);
+            results.array.forEach(element => {
+                console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
+                // ajouter 1 à la valeur currentDay
+            });
+        });
+        
     } catch (error) {
         console.log("erreur GetMessageDay => " + error);
     }
@@ -247,4 +221,15 @@ function ChangeGamePlayed()
     {
         console.log("erreur ChangeGamePlayed => " + error)
     }
+}
+
+function InsertMessage(id,nbJour,channel,message)
+{
+    var insert = process.env.InsertMessage;
+    insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[MESSAGE]',message).replace('[TOGGLE]',1);
+    connection.connect();
+    connection.query(insert, function (error, results, fields) {
+      if (error) console.log(error);
+    });
+    connection.end();
 }
