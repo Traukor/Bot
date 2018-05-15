@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "requires": true,
   "script": {
-    "start": "node index.js" 
+    "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "11.3.2",
-    "lowdb": "1.0.0"
+    "lowdb": "1.0.0",
+    "mysql": "^2.15.0"
   }
 }

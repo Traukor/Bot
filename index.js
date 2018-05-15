@@ -1,11 +1,25 @@
 const Discord = require('discord.js');
 const low = require('lowdb');
+var mysql = require('mysql');
+var test;
+var connection = mysql.createConnection({
+    host     : 'eu-cdbr-west-02.cleardb.net',
+    user     : 'b0ba1fc90b423c',
+    password : '37d0c07b',
+    database : 'heroku_bf7b571e4ee1adb'
+  });
+  connection.connect();
+  connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    if (error) throw error;
+    test = results[0].solution;
+  });
+  connection.end();
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('database.json');
 const db = low(adapter);
 const token = process.env.TOKEN;
 
-db.defaults({ messageDay: [], games: [] }).write();
+db.defaults({ games: [] }).write();
 
 
 var client = new Discord.Client();
