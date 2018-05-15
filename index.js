@@ -37,7 +37,7 @@ try {
         });
         connection.release();
     });
-    GetMessageDay(false);
+    GetMessageDay(true);
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
         ChangeGamePlayed();
@@ -207,9 +207,7 @@ function GetMessageDay(incrementCurrentDay) {
             connection.query(process.env.selectAllMessage, function (error, results, fields) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results));
-                console.log("l210 => " + rows);
                 for(var element of rows) {
-                    console.log("element in rows l212 => " + element);
                     console.log(`le message ${element.message} est envoyé tous les ${element.nbJour} dans le salon ${element.channel}`);
                     if(incrementCurrentDay)
                     {
