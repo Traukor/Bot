@@ -236,6 +236,6 @@ function GetNextId()
 {
     connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
-        nextId = (results[0].rowCount + 1);
+        nextId = Number(results[0].rowCount + 1);
     });
 }
