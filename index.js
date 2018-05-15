@@ -31,6 +31,7 @@ try {
         connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
             if (error) console.log("error select count => " + error);
             nextId = (Number(results[0].rowCount));
+            console.log("Dernier ID message => " + nextId);
         });
         connection.release();
     });
