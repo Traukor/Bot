@@ -24,7 +24,7 @@ var memberCount = client.users.size;
 var serverCount = client.guilds.size;
 var interval;
 var intervalGame;
-var nextId;
+var nextId = 1;
 try {
     client.on("ready", () => {
         var servers = client.guilds.array().map(g => g.name).join(",");
@@ -81,7 +81,7 @@ client.on("message", message => {
                 var day = 0;
                 var m = "";
                 GetNextId();
-                var number = nextId + 1;
+                var number = nextId;
                 console.log("nextId + 1 => " + number);
                 try {
                     var day = Number(args[1]);
@@ -236,6 +236,6 @@ function GetNextId()
 {
     connection.query('Select count(*) as rowCount from message', function (error, results, fields) {
         if (error) console.log("error select count => " + error);
-        nextId = Number(results[0].rowCount + 1);
+        nextId = Number(results[0].rowCount) + 1;
     });
 }
