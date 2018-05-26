@@ -46,7 +46,7 @@ try {
         interval = setInterval(() => {
             GetMessageDay(true);
         },
-            86400000);
+            60,000);
         console.log("-----------------------------------------------");
         console.log("[!] Connexion en cours ...\n[!] Veuillez patienter! \n	[!] Les évènements sont après ! :)\n	[!] Les préfix sont : " + prefix + "\n	[!] Mentions : " + mention + " \n [!] Nombre de membre: " + client.users.size + "\n [!] Nombre de serveurs: " + client.guilds.size + "\n ");
     });
@@ -60,6 +60,11 @@ try {
 
 client.on("message", message => {
     if (message.author.bot) return;
+
+    // xp bonus ici
+
+
+
     var testPrefix = message.content.substring(0,1);
     if(testPrefix != prefix) return;
     var msgAuthor = message.author.id;
@@ -73,9 +78,13 @@ client.on("message", message => {
             try {
                 console.log("case help");
                 var commandeBot = "!help => afficher les commandes \n";
-                commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n";
-                commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n";
-                commandeBot += "!Dayloop <day> <channel> <message> => enregistre un <message> à répéter tous les <day> jours dans le <channel>";
+                if(message.member.roles.some(r=>["Admin", "Responsable Multigaming"].includes(r.name)) )
+                {
+                    commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n";
+                    commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n";
+                    commandeBot += "!Dayloop <day> <channel> <message> <heure> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure";
+                }
+                commandeBot += "!monXP => affiche mon xp et mon lvl (en cours de dev ...)";
                 var help_embed = new Discord.RichEmbed()
                     .setColor('#D9F200')
                     .addField("Commande du bot", "Voici les commandes du bot \n" + commandeBot)
@@ -89,6 +98,8 @@ client.on("message", message => {
         //Enregistre un message à envoyer régulièrement sur un salon
         case "dayloop":
             try {
+                if(!message.member.roles.some(r=>["Admin", "Responsable Multigaming"].includes(r.name)) )
+                    return message.reply("Vous n'avez pas la permissions de faire ça!");
                 console.log("case dayloop");
                 var day = 0;
                 var m = "";
@@ -143,6 +154,8 @@ client.on("message", message => {
         //Récupère les messages enregistré avec leur ID
         case "getmessage":
             try{
+                if(!message.member.roles.some(r=>["Admin", "Responsable Multigaming"].includes(r.name)) )
+                    return message.reply("Vous n'avez pas la permissions de faire ça!");
                 console.log("case getmessage");
                 pool.getConnection(function(err, connection) {
                     connection.query(process.env.selectAllMessage, function (error, results, fields) {
@@ -172,6 +185,8 @@ client.on("message", message => {
         //Supprime un message récurent de la base
         case "toggledayloop":
             try{
+                if(!message.member.roles.some(r=>["Admin", "Responsable Multigaming"].includes(r.name)) )
+                    return message.reply("Vous n'avez pas la permissions de faire ça!");
                 console.log("case toggledayloop");
                 var idMessage = Number(args[1]);
                 if (isNaN(idMessage)) {
@@ -223,25 +238,33 @@ function GetMessageDay(incrementCurrentDay) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results));
                 for(var element of rows) {
-                    console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel}`);
-                    
-                    if(element.nbJour == element.currentDay)
+                    console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel} à ${element.heure} heure`);
+                    //if(element.heure == Date.now.)
+                    var dateNow = new Date();
+                    var currentHour = dateNow.getHours();
+                    currentHour = (currentHour < 10 ? "0" : "") + currentHour;
+                    var currentMin = dateNow.getMinutes();
+                    currentMin = (currentMin < 10 ? "0" : "") + currentMin;
+                    if(element.heure == currentHour + ":" + currentMin)
                     {
-                        var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
-                        var channel = client.channels.get(element.channel);
-                        channel.send(mess);
-                        var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
-                        connection.query(query, function(err,res,field) {
-                            if(err) console.log(err);
-                        });
-                    }
-                    else if(incrementCurrentDay)
-                    {
-                        // ajouter 1 à la valeur currentDay
-                        var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
-                        connection.query(query, function(err,res,field) {
-                            if(err) console.log(err);
-                        });
+                        if(element.nbJour == element.currentDay)
+                        {
+                            var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
+                            var channel = client.channels.get(element.channel);
+                            channel.send(mess);
+                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
+                            connection.query(query, function(err,res,field) {
+                                if(err) console.log(err);
+                            });
+                        }
+                        else if(incrementCurrentDay)
+                        {
+                            // ajouter 1 à la valeur currentDay
+                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
+                            connection.query(query, function(err,res,field) {
+                                if(err) console.log(err);
+                            });
+                        }
                     }
                 }
             });
@@ -270,6 +293,7 @@ function ChangeGamePlayed()
 
 function InsertMessage(id,nbJour,channel,message)
 {
+    message = message.replace('\\','\\\\');
     var insert = process.env.insertMessage;
     insert = insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
     console.log(insert);
