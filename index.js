@@ -46,7 +46,7 @@ try {
         interval = setInterval(() => {
             GetMessageDay(true);
         },
-            60,000);
+            60000);
         console.log("-----------------------------------------------");
         console.log("[!] Connexion en cours ...\n[!] Veuillez patienter! \n	[!] Les évènements sont après ! :)\n	[!] Les préfix sont : " + prefix + "\n	[!] Mentions : " + mention + " \n [!] Nombre de membre: " + client.users.size + "\n [!] Nombre de serveurs: " + client.guilds.size + "\n ");
     });
