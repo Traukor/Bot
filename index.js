@@ -5,7 +5,8 @@ var pool = mysql.createPool({
     host     : process.env.host,
     user     : process.env.user,
     password : process.env.pass,
-    database : process.env.database
+    database : process.env.database,
+    migrate: "safe"
 });
 
 const FileSync = require('lowdb/adapters/FileSync');
