@@ -82,7 +82,7 @@ client.on("message", message => {
                 {
                     commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n";
                     commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n";
-                    commandeBot += "!Dayloop <day> <channel> <message> <heure> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure";
+                    commandeBot += "!Dayloop <day> <channel> <message> <heure> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure \n";
                 }
                 commandeBot += "!monXP => affiche mon xp et mon lvl (en cours de dev ...)";
                 var help_embed = new Discord.RichEmbed()
