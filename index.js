@@ -233,7 +233,6 @@ client.on("message", message => {
 
 function GetMessageDay(incrementCurrentDay) {
     try {
-        console.log("GetMessageDay(" + incrementCurrentDay + ")");
         pool.getConnection(function(err, connection) {
             connection.query(process.env.selectAllMessage, function (error, results, fields) {
                 if (error) console.log(error);
