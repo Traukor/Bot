@@ -245,33 +245,34 @@ function GetMessageDay(incrementCurrentDay) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results));
                 for(var element of rows) {
-                    
-                    //if(element.heure == Date.now.)
-                    var dateNow = new Date();
-                    var currentHour = dateNow.getHours() + 2;
-                    currentHour = (currentHour < 10 ? "0" : "") + currentHour;
-                    var currentMin = dateNow.getMinutes();
-                    currentMin = (currentMin < 10 ? "0" : "") + currentMin;
-                    if(element.heure == currentHour + ":" + currentMin)
+                    if(element.toggle == 1)
                     {
-                        if(element.nbJour == element.currentDay)
+                        var dateNow = new Date();
+                        var currentHour = dateNow.getHours() + 2;
+                        currentHour = (currentHour < 10 ? "0" : "") + currentHour;
+                        var currentMin = dateNow.getMinutes();
+                        currentMin = (currentMin < 10 ? "0" : "") + currentMin;
+                        if(element.heure == currentHour + ":" + currentMin)
                         {
-                            console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel} à ${element.heure} heure`);
-                            var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
-                            var channel = client.channels.get(element.channel);
-                            channel.send(mess);
-                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
-                            connection.query(query, function(err,res,field) {
-                                if(err) console.log(err);
-                            });
-                        }
-                        else if(incrementCurrentDay)
-                        {
-                            // ajouter 1 à la valeur currentDay
-                            var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
-                            connection.query(query, function(err,res,field) {
-                                if(err) console.log(err);
-                            });
+                            if(element.nbJour == element.currentDay)
+                            {
+                                console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel} à ${element.heure} heure`);
+                                var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
+                                var channel = client.channels.get(element.channel);
+                                channel.send(mess);
+                                var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",0).replace("[ID]",element.id);
+                                connection.query(query, function(err,res,field) {
+                                    if(err) console.log(err);
+                                });
+                            }
+                            else if(incrementCurrentDay)
+                            {
+                                // ajouter 1 à la valeur currentDay
+                                var query = process.env.updateCurrentDay.replace("[NEWCURRENTDAY]",element.currentDay + 1).replace("[ID]",element.id);
+                                connection.query(query, function(err,res,field) {
+                                    if(err) console.log(err);
+                                });
+                            }
                         }
                     }
                 }
