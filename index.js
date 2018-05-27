@@ -239,7 +239,7 @@ function GetMessageDay(incrementCurrentDay) {
                 if (error) console.log(error);
                 var rows = JSON.parse(JSON.stringify(results));
                 for(var element of rows) {
-                    console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel} à ${element.heure} heure`);
+                    
                     //if(element.heure == Date.now.)
                     var dateNow = new Date();
                     var currentHour = dateNow.getHours();
@@ -250,6 +250,7 @@ function GetMessageDay(incrementCurrentDay) {
                     {
                         if(element.nbJour == element.currentDay)
                         {
+                            console.log(`le message "${element.message}" est envoyé tous les ${element.nbJour} jours dans le salon ${element.channel} à ${element.heure} heure`);
                             var mess = new Discord.RichEmbed().setColor("#FFFF00").addField("Annonce",element.message);
                             var channel = client.channels.get(element.channel);
                             channel.send(mess);
@@ -302,6 +303,7 @@ function InsertMessage(id,nbJour,channel,message)
         connection.query(insert, function (error, results, fields) {
             if (error) console.log("erreur insert => " + error);
         });
+        connection.release();
     });
 }
 
@@ -314,5 +316,6 @@ function GetNextId()
             console.log((Number(results[0].rowCount) + 1));
             console.log("after rowcount nextId => " + nextId);
         });
+        connection.release();
     });
 }
