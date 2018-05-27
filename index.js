@@ -83,7 +83,7 @@ client.on("message", message => {
                 {
                     commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n\n";
                     commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n\n";
-                    commandeBot += "!Dayloop <day> <channel> <message> <heure> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure\n\n";
+                    commandeBot += "!Dayloop <day> <channel> <message> <heure:minute> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure\n\n";
                 }
                 commandeBot += "!monXP => affiche mon xp et mon lvl (en cours de dev ...)";
                 var help_embed = new Discord.RichEmbed()
@@ -111,7 +111,7 @@ client.on("message", message => {
                 catch (e) {
                     message.reply("Le nombre de jour n'est pas correct");
                     console.log("Erreur dayloop nombre de jour || " + e);
-                    break;
+                    return;
                 }
                 for (var i = 3; i < args.length; i++) {
                     if (m === "")
@@ -123,10 +123,17 @@ client.on("message", message => {
                 if (!channelId) {
                     message.channel.send("exception => le channel n'a pas été trouvé");
                     console.log(`exception dayloop => channel ${args[2]} introuvable`);
+                    return;
+                }
+                var time = args[4].split(":");
+                if(time.length != 2)
+                {
+                    message.channel.send("merci de fournir l'heure sous forme 'hh:mm'");
+                    return;
                 }
                 else {
                     
-                        InsertMessage(nextId,day,channelId.id,m);
+                        InsertMessage(nextId,day,channelId.id,m,args[4]);
                     var message_embed = new Discord.RichEmbed()
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
@@ -292,11 +299,17 @@ function ChangeGamePlayed()
     }
 }
 
-function InsertMessage(id,nbJour,channel,message)
+function InsertMessage(id,nbJour,channel,message,heure)
 {
     message = message.replace('\\','\\\\');
     var insert = process.env.insertMessage;
-    insert = insert.replace('[ID]',id).replace('[NBJOUR]',nbJour).replace('[CHANNEL]',channel).replace('[MESSAGE]',message).replace('[TOGGLE]',1).replace('[CURRENTDAY]',0);
+    insert = insert.replace('[ID]',id)
+                    .replace('[NBJOUR]',nbJour)
+                    .replace('[CHANNEL]',channel)
+                    .replace('[MESSAGE]',message)
+                    .replace('[TOGGLE]',1)
+                    .replace('[CURRENTDAY]',0)
+                    .replace('[HEURE]',heure);
     console.log(insert);
     pool.getConnection(function(err, connection) {
         connection.query(insert, function (error, results, fields) {
