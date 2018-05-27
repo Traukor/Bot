@@ -245,7 +245,6 @@ function GetMessageDay(incrementCurrentDay) {
                     currentHour = (currentHour < 10 ? "0" : "") + currentHour;
                     var currentMin = dateNow.getMinutes();
                     currentMin = (currentMin < 10 ? "0" : "") + currentMin;
-                    console.log(currentHour + ":" + currentMin);
                     if(element.heure == currentHour + ":" + currentMin)
                     {
                         if(element.nbJour == element.currentDay)
