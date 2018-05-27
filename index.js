@@ -83,7 +83,7 @@ client.on("message", message => {
                 {
                     commandeBot += "!getmessage => affiche tous les messages automatiques enregistré avec leur id\n\n";
                     commandeBot += "!toggledayloop <id> => active/désactive un message automatique\n\n";
-                    commandeBot += "!Dayloop <day> <channel> <message> <heure:minute> => enregistre un <message> à répéter tous les <day> jours dans le <channel> à <heure:minute> heure\n\n";
+                    commandeBot += "!Dayloop <day> <heure:minute> <channel> <message>  => enregistre un <message> à répéter tous les <day> jours à <heure:minute> heure dans le <channel> \n\n";
                 }
                 commandeBot += "!monXP => affiche mon xp et mon lvl (en cours de dev ...)";
                 var help_embed = new Discord.RichEmbed()
@@ -113,19 +113,19 @@ client.on("message", message => {
                     console.log("Erreur dayloop nombre de jour || " + e);
                     return;
                 }
-                for (var i = 3; i < args.length; i++) {
+                for (var i = 4; i < args.length; i++) {
                     if (m === "")
                         m += args[i];
                     else
                         m += " " + args[i];
                 }
-                var channelId = client.channels.find("name", args[2]);
+                var channelId = client.channels.find("name", args[3]);
                 if (!channelId) {
                     message.channel.send("exception => le channel n'a pas été trouvé");
-                    console.log(`exception dayloop => channel ${args[2]} introuvable`);
+                    console.log(`exception dayloop => channel ${args[3]} introuvable`);
                     return;
                 }
-                var time = args[4].split(":");
+                var time = args[2].split(":");
                 if(time.length != 2)
                 {
                     message.channel.send("merci de fournir l'heure sous forme 'hh:mm'");
@@ -138,7 +138,7 @@ client.on("message", message => {
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
                         .addField("message => ", m)
-                        .setFooter(`Le message sera envoyé tous les ${args[1]} jours à partir de maintenant dans le salon ${args[2]}`);
+                        .setFooter(`Le message sera envoyé tous les ${args[1]} jours à ${args[2]} heure dans le salon ${args[3]}`);
                     if(!interval)
                     {
                         interval = setInterval(() => {
