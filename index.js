@@ -133,7 +133,7 @@ client.on("message", message => {
                 }
                 else {
                     
-                        InsertMessage(nextId,day,channelId.id,m,args[4]);
+                        InsertMessage(nextId,day,channelId.id,m,args[2]);
                     var message_embed = new Discord.RichEmbed()
                         .setColor("#00F911")
                         .setTitle("Message enregistré")
